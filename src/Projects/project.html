@@ -1,638 +1,804 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>React Learning Journey</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
-<style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --card: #16161f;
-    --border: #2a2a3a;
-    --text: #e8e8f0;
-    --muted: #6b6b8a;
-    --accent1: #ff6b35;
-    --accent2: #00e5ff;
-    --accent3: #b44dff;
-    --accent4: #39ff14;
-    --accent5: #ffd700;
-    --accent6: #ff3d71;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>React Learning Journey</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --card: #16161f;
+      --border: #2a2a3a;
+      --text: #e8e8f0;
+      --muted: #6b6b8a;
+      --accent1: #ff6b35;
+      --accent2: #00e5ff;
+      --accent3: #b44dff;
+      --accent4: #39ff14;
+      --accent5: #ffd700;
+      --accent6: #ff3d71;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    overflow-x: hidden;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 60px 20px;
-    position: relative;
-    overflow: hidden;
-  }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
 
-  .hero::after {
-    content: '';
-    position: absolute;
-    width: 700px; height: 700px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,229,255,0.06) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
 
-  .tag {
-    display: inline-block;
-    border: 1px solid var(--accent2);
-    color: var(--accent2);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 3px;
-    padding: 6px 16px;
-    border-radius: 2px;
-    text-transform: uppercase;
-    margin-bottom: 30px;
-    animation: fadeUp 0.6s ease both;
-  }
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .hero h1 {
-    font-size: clamp(48px, 9vw, 110px);
-    font-weight: 800;
-    line-height: 0.9;
-    letter-spacing: -3px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
 
-  .hero h1 span.r { color: var(--accent1); }
-  .hero h1 span.e { color: var(--accent2); }
-  .hero h1 span.a { color: var(--accent3); }
-  .hero h1 span.c { color: var(--accent4); }
-  .hero h1 span.t { color: var(--accent5); }
+    .tag {
+      display: inline-block;
+      border: 1px solid var(--accent2);
+      color: var(--accent2);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      padding: 6px 16px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      animation: fadeUp 0.6s ease both;
+    }
 
-  .hero-sub {
-    font-family: 'Space Mono', monospace;
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 50px;
-    max-width: 500px;
-    line-height: 1.8;
-    animation: fadeUp 0.6s 0.2s ease both;
-  }
+    .hero h1 {
+      font-size: clamp(48px, 9vw, 110px);
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -3px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
 
-  .stats-row {
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-    justify-content: center;
-    animation: fadeUp 0.6s 0.3s ease both;
-  }
+    .hero h1 span.r {
+      color: var(--accent1);
+    }
 
-  .stat {
-    text-align: center;
-  }
-  .stat-num {
-    font-size: 42px;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
+    .hero h1 span.e {
+      color: var(--accent2);
+    }
 
-  .scroll-hint {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    animation: fadeUp 0.6s 0.6s ease both;
-  }
-  .scroll-line {
-    width: 1px;
-    height: 60px;
-    background: linear-gradient(to bottom, var(--accent2), transparent);
-    animation: pulse 2s infinite;
-  }
+    .hero h1 span.a {
+      color: var(--accent3);
+    }
 
-  /* SECTION HEADER */
-  .section-header {
-    padding: 80px 40px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .section-header .label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 3px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .section-header h2 {
-    font-size: clamp(32px, 5vw, 60px);
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1;
-  }
+    .hero h1 span.c {
+      color: var(--accent4);
+    }
 
-  /* CHAPTER GROUPS */
-  .chapters {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-    display: flex;
-    flex-direction: column;
-    gap: 60px;
-  }
+    .hero h1 span.t {
+      color: var(--accent5);
+    }
 
-  .chapter {
-    position: relative;
-  }
+    .hero-sub {
+      font-family: 'Space Mono', monospace;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 50px;
+      max-width: 500px;
+      line-height: 1.8;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
 
-  .chapter-header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 24px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
+    .stats-row {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
 
-  .chapter-num {
-    width: 52px; height: 52px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
+    .stat {
+      text-align: center;
+    }
 
-  .chapter-title { font-size: 24px; font-weight: 800; }
-  .chapter-subtitle {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+    .stat-num {
+      font-size: 42px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
 
-  .chapter-count {
-    margin-left: auto;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 4px 12px;
-    border-radius: 2px;
-  }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
 
-  /* CARDS GRID */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 16px;
-  }
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      animation: fadeUp 0.6s 0.6s ease both;
+    }
 
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: border-color 0.2s, transform 0.2s;
-  }
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent2), transparent);
+      animation: pulse 2s infinite;
+    }
 
-  .card:hover {
-    transform: translateY(-3px);
-  }
+    /* SECTION HEADER */
+    .section-header {
+      padding: 80px 40px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-  .card-top {
-    padding: 20px 24px;
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
+    .section-header .label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
 
-  .card-icon {
-    width: 40px; height: 40px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
+    .section-header h2 {
+      font-size: clamp(32px, 5vw, 60px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+    }
 
-  .card-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    margin-bottom: 4px;
-    text-transform: uppercase;
-  }
-  .card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-  .card-desc {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
+    /* CHAPTER GROUPS */
+    .chapters {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+    }
 
-  .card-toggle {
-    width: 100%;
-    background: rgba(255,255,255,0.03);
-    border: none;
-    border-top: 1px solid var(--border);
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
-    padding: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background 0.2s, color 0.2s;
-  }
-  .card-toggle:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+    .chapter {
+      position: relative;
+    }
 
-  .card-code {
-    display: none;
-    background: #0d0d14;
-    border-top: 1px solid var(--border);
-    padding: 16px 20px;
-    overflow-x: auto;
-  }
-  .card-code.open { display: block; }
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
 
-  .card-code pre {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    line-height: 1.8;
-    color: #aaa;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
+    .chapter-num {
+      width: 52px;
+      height: 52px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
 
-  /* SYNTAX COLORS */
-  .kw { color: #c792ea; }
-  .fn { color: #82aaff; }
-  .str { color: #c3e88d; }
-  .cmt { color: #546e7a; font-style: italic; }
-  .tag-c { color: #ff6b35; }
-  .prop { color: #00e5ff; }
-  .num { color: #f78c6c; }
+    .chapter-title {
+      font-size: 24px;
+      font-weight: 800;
+    }
 
-  /* CONCEPT PILLS */
-  .concept-pills {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 0 24px 16px;
-  }
-  .pill {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    border-radius: 2px;
-    padding: 3px 8px;
-    background: rgba(255,255,255,0.05);
-    color: var(--muted);
-    border: 1px solid var(--border);
-  }
+    .chapter-subtitle {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
 
-  /* PROJECT SECTION */
-  .project-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px 100px;
-  }
+    .chapter-count {
+      margin-left: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 2px;
+    }
 
-  .project-banner {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-  }
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
 
-  .project-banner::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at top right, rgba(180,77,255,0.12) 0%, transparent 60%),
-                radial-gradient(ellipse at bottom left, rgba(0,229,255,0.08) 0%, transparent 60%);
-    pointer-events: none;
-  }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
 
-  .project-inner {
-    padding: 50px;
-    position: relative;
-  }
+    .card:hover {
+      transform: translateY(-3px);
+    }
 
-  .project-tag {
-    display: inline-block;
-    background: var(--accent3);
-    color: white;
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 2px;
-    margin-bottom: 20px;
-  }
+    .card-top {
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
 
-  .project-title {
-    font-size: clamp(30px, 5vw, 54px);
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1;
-    margin-bottom: 16px;
-  }
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
 
-  .project-desc {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.9;
-    max-width: 600px;
-    margin-bottom: 40px;
-  }
+    .card-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
 
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
-    margin-bottom: 40px;
-  }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
 
-  .feature-card {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
-  }
+    .card-desc {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
 
-  .feature-icon { font-size: 24px; margin-bottom: 10px; }
-  .feature-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
-  .feature-concepts {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    line-height: 1.8;
-  }
-  .feature-concepts span {
-    display: inline-block;
-    background: rgba(255,255,255,0.05);
-    border-radius: 2px;
-    padding: 1px 6px;
-    margin: 2px 2px 0 0;
-    border: 1px solid var(--border);
-  }
+    .card-toggle {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: none;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
 
-  .file-structure {
-    background: #0d0d14;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 24px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    line-height: 2;
-    color: var(--muted);
-  }
+    .card-toggle:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
 
-  .file-structure .dir { color: var(--accent2); }
-  .file-structure .file { color: var(--text); }
-  .file-structure .comment { color: var(--muted); font-style: italic; }
-  .file-structure .new { color: var(--accent4); }
+    .card-code {
+      display: none;
+      background: #0d0d14;
+      border-top: 1px solid var(--border);
+      padding: 16px 20px;
+      overflow-x: auto;
+    }
 
-  .progress-bar-wrap {
-    margin-top: 50px;
-    padding-top: 40px;
-    border-top: 1px solid var(--border);
-  }
+    .card-code.open {
+      display: block;
+    }
 
-  .progress-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-  }
+    .card-code pre {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      line-height: 1.8;
+      color: #aaa;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
 
-  .skills-map {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+    /* SYNTAX COLORS */
+    .kw {
+      color: #c792ea;
+    }
 
-  .skill-badge {
-    border: 1px solid;
-    border-radius: 4px;
-    padding: 8px 14px;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
+    .fn {
+      color: #82aaff;
+    }
 
-  .skill-badge .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+    .str {
+      color: #c3e88d;
+    }
 
-  /* ROADMAP VISUAL */
-  .roadmap {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-  }
+    .cmt {
+      color: #546e7a;
+      font-style: italic;
+    }
 
-  .roadmap-line {
-    position: absolute;
-    left: 50%;
-    top: 0; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent);
-    transform: translateX(-50%);
-  }
+    .tag-c {
+      color: #ff6b35;
+    }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .prop {
+      color: #00e5ff;
+    }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
-  }
+    .num {
+      color: #f78c6c;
+    }
 
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+    /* CONCEPT PILLS */
+    .concept-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 24px 16px;
+    }
 
-  .chevron { transition: transform 0.2s; }
-  .chevron.open { transform: rotate(180deg); }
+    .pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
 
-  /* DIVIDER */
-  .divider {
-    max-width: 1200px;
-    margin: 0 auto 0;
-    padding: 0 20px;
-    border-top: 1px solid var(--border);
-  }
+    /* PROJECT SECTION */
+    .project-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px 100px;
+    }
 
-  /* COLOR ACCENTS PER CHAPTER */
-  .ch1 { --ch: var(--accent1); }
-  .ch2 { --ch: var(--accent2); }
-  .ch3 { --ch: var(--accent3); }
-  .ch4 { --ch: var(--accent4); }
-  .ch5 { --ch: var(--accent5); }
-  .ch6 { --ch: var(--accent6); }
+    .project-banner {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
 
-  .card { border-color: var(--border); }
-  .card:hover { border-color: var(--ch, var(--accent2)); }
+    .project-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top right, rgba(180, 77, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at bottom left, rgba(0, 229, 255, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
 
-  .chapter-num { background: color-mix(in srgb, var(--ch, var(--accent2)) 15%, transparent); color: var(--ch, var(--accent2)); border: 1px solid color-mix(in srgb, var(--ch, var(--accent2)) 30%, transparent); }
-  .card-icon { background: color-mix(in srgb, var(--ch, var(--accent2)) 15%, transparent); color: var(--ch, var(--accent2)); }
+    .project-inner {
+      padding: 50px;
+      position: relative;
+    }
 
-  .glow-text { color: var(--ch, var(--accent2)); }
+    .project-tag {
+      display: inline-block;
+      background: var(--accent3);
+      color: white;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
 
-  /* FOOTER */
-  footer {
-    text-align: center;
-    padding: 40px;
-    border-top: 1px solid var(--border);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1px;
-  }
+    .project-title {
+      font-size: clamp(30px, 5vw, 54px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
 
-  footer span { color: var(--accent1); }
+    .project-desc {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
 
-  /* MOBILE */
-  @media (max-width: 600px) {
-    .project-inner { padding: 24px; }
-    .stats-row { gap: 24px; }
-    .section-header { padding: 60px 20px 30px; }
-  }
-</style>
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .feature-concepts {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .feature-concepts span {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 2px;
+      padding: 1px 6px;
+      margin: 2px 2px 0 0;
+      border: 1px solid var(--border);
+    }
+
+    .file-structure {
+      background: #0d0d14;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      line-height: 2;
+      color: var(--muted);
+    }
+
+    .file-structure .dir {
+      color: var(--accent2);
+    }
+
+    .file-structure .file {
+      color: var(--text);
+    }
+
+    .file-structure .comment {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .file-structure .new {
+      color: var(--accent4);
+    }
+
+    .progress-bar-wrap {
+      margin-top: 50px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .progress-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .skills-map {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill-badge {
+      border: 1px solid;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ROADMAP VISUAL */
+    .roadmap {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border) 10%, var(--border) 90%, transparent);
+      transform: translateX(-50%);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .chevron {
+      transition: transform 0.2s;
+    }
+
+    .chevron.open {
+      transform: rotate(180deg);
+    }
+
+    /* DIVIDER */
+    .divider {
+      max-width: 1200px;
+      margin: 0 auto 0;
+      padding: 0 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* COLOR ACCENTS PER CHAPTER */
+    .ch1 {
+      --ch: var(--accent1);
+    }
+
+    .ch2 {
+      --ch: var(--accent2);
+    }
+
+    .ch3 {
+      --ch: var(--accent3);
+    }
+
+    .ch4 {
+      --ch: var(--accent4);
+    }
+
+    .ch5 {
+      --ch: var(--accent5);
+    }
+
+    .ch6 {
+      --ch: var(--accent6);
+    }
+
+    .card {
+      border-color: var(--border);
+    }
+
+    .card:hover {
+      border-color: var(--ch, var(--accent2));
+    }
+
+    .chapter-num {
+      background: color-mix(in srgb, var(--ch, var(--accent2)) 15%, transparent);
+      color: var(--ch, var(--accent2));
+      border: 1px solid color-mix(in srgb, var(--ch, var(--accent2)) 30%, transparent);
+    }
+
+    .card-icon {
+      background: color-mix(in srgb, var(--ch, var(--accent2)) 15%, transparent);
+      color: var(--ch, var(--accent2));
+    }
+
+    .glow-text {
+      color: var(--ch, var(--accent2));
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    footer span {
+      color: var(--accent1);
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      .project-inner {
+        padding: 24px;
+      }
+
+      .stats-row {
+        gap: 24px;
+      }
+
+      .section-header {
+        padding: 60px 20px 30px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="tag">// learning log — 2026</div>
-  <h1>
-    <span class="r">R</span><span class="e">E</span><span class="a">A</span><span class="c">C</span><span class="t">T</span><br>
-    JOURNEY
-  </h1>
-  <p class="hero-sub">
-    20 components hand-crafted line by line.<br>
-    From useState to Bootstrap — documented.
-  </p>
-  <div class="stats-row">
-    <div class="stat">
-      <div class="stat-num" style="color:var(--accent1)">20</div>
-      <div class="stat-label">Files Written</div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="tag">// learning log — 2026</div>
+    <h1>
+      <span class="r">R</span><span class="e">E</span><span class="a">A</span><span class="c">C</span><span
+        class="t">T</span><br>
+      JOURNEY
+    </h1>
+    <p class="hero-sub">
+      20 components hand-crafted line by line.<br>
+      From useState to Bootstrap — documented.
+    </p>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num" style="color:var(--accent1)">20</div>
+        <div class="stat-label">Files Written</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--accent2)">6</div>
+        <div class="stat-label">Core Concepts</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--accent3)">∞</div>
+        <div class="stat-label">Hours Learned</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--accent4)">1</div>
+        <div class="stat-label">Big Project Ahead</div>
+      </div>
     </div>
-    <div class="stat">
-      <div class="stat-num" style="color:var(--accent2)">6</div>
-      <div class="stat-label">Core Concepts</div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      SCROLL
     </div>
-    <div class="stat">
-      <div class="stat-num" style="color:var(--accent3)">∞</div>
-      <div class="stat-label">Hours Learned</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" style="color:var(--accent4)">1</div>
-      <div class="stat-label">Big Project Ahead</div>
-    </div>
+  </section>
+
+  <!-- ======================= CHAPTER 1: STATE ======================= -->
+  <div class="section-header ch1">
+    <div class="label">Chapter 01</div>
+    <h2>STATE <span class="glow-text">MANAGEMENT</span></h2>
   </div>
-  <div class="scroll-hint">
-    <div class="scroll-line"></div>
-    SCROLL
-  </div>
-</section>
 
-<!-- ======================= CHAPTER 1: STATE ======================= -->
-<div class="section-header ch1">
-  <div class="label">Chapter 01</div>
-  <h2>STATE <span class="glow-text">MANAGEMENT</span></h2>
-</div>
+  <div class="chapters ch1">
 
-<div class="chapters ch1">
+    <div class="chapter">
+      <div class="cards-grid">
 
-  <div class="chapter">
-    <div class="cards-grid">
-
-      <!-- Card 1 -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🧠</div>
-          <div>
-            <div class="card-num">File 01 — 1-state.jsx</div>
-            <div class="card-title">useState Basics</div>
-            <div class="card-desc">Learned how useState holds a value and re-renders the component when updated. Used setName to swap between names on button click.</div>
+        <!-- Card 1 -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🧠</div>
+            <div>
+              <div class="card-num">File 01 — 1-state.jsx</div>
+              <div class="card-title">useState Basics</div>
+              <div class="card-desc">Learned how useState holds a value and re-renders the component when updated. Used
+                setName to swap between names on button click.</div>
+            </div>
           </div>
-        </div>
-        <div class="concept-pills">
-          <span class="pill">useState</span>
-          <span class="pill">event handler</span>
-          <span class="pill">re-render</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">import</span> { <span class="fn">useState</span> } <span class="kw">from</span> <span class="str">"react"</span>;
+          <div class="concept-pills">
+            <span class="pill">useState</span>
+            <span class="pill">event handler</span>
+            <span class="pill">re-render</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">import</span> { <span class="fn">useState</span> } <span class="kw">from</span> <span class="str">"react"</span>;
 
 <span class="kw">function</span> <span class="fn">State</span>() {
   <span class="kw">const</span> [name, setName] = <span class="fn">useState</span>(<span class="str">"Pankaj"</span>);
@@ -648,57 +814,59 @@
     <span class="tag-c">&lt;/div&gt;</span>
   );
 }</pre>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🔢</div>
-          <div>
-            <div class="card-num">File 02 — 2-counter.jsx</div>
-            <div class="card-title">Counter App</div>
-            <div class="card-desc">Built a counter with two separate states — one for increase and one for decrease. Each button updates its own state independently.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">multiple states</span>
-          <span class="pill">increment</span>
-          <span class="pill">decrement</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> [countincrease, setCountincrease] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+        <!-- Card 2 -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🔢</div>
+            <div>
+              <div class="card-num">File 02 — 2-counter.jsx</div>
+              <div class="card-title">Counter App</div>
+              <div class="card-desc">Built a counter with two separate states — one for increase and one for decrease.
+                Each button updates its own state independently.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">multiple states</span>
+            <span class="pill">increment</span>
+            <span class="pill">decrement</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> [countincrease, setCountincrease] = <span class="fn">useState</span>(<span class="num">0</span>);
 <span class="kw">const</span> [countdecrease, setCountdecrease] = <span class="fn">useState</span>(<span class="num">0</span>);
 
 <span class="cmt">// Two independent states, two handlers</span>
 <span class="kw">const</span> <span class="fn">handleIncrease</span> = () => <span class="fn">setCountincrease</span>(countincrease + <span class="num">1</span>);
 <span class="kw">const</span> <span class="fn">handleDecrease</span> = () => <span class="fn">setCountdecrease</span>(countdecrease - <span class="num">1</span>);</pre>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🔀</div>
-          <div>
-            <div class="card-num">File 03 — 3-toggle.jsx</div>
-            <div class="card-title">Toggle Components</div>
-            <div class="card-desc">Used boolean state to conditionally render two different child components. The ! operator flips the boolean on each click.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">boolean state</span>
-          <span class="pill">conditional render</span>
-          <span class="pill">ternary</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> [display, setDisplay] = <span class="fn">useState</span>(<span class="kw">true</span>);
+
+        <!-- Card 3 -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🔀</div>
+            <div>
+              <div class="card-num">File 03 — 3-toggle.jsx</div>
+              <div class="card-title">Toggle Components</div>
+              <div class="card-desc">Used boolean state to conditionally render two different child components. The !
+                operator flips the boolean on each click.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">boolean state</span>
+            <span class="pill">conditional render</span>
+            <span class="pill">ternary</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> [display, setDisplay] = <span class="fn">useState</span>(<span class="kw">true</span>);
 
 <span class="cmt">// ternary renders one of two components</span>
 {display ? <span class="tag-c">&lt;Rohit /&gt;</span> : <span class="tag-c">&lt;Pankaj /&gt;</span>}
@@ -706,96 +874,101 @@
 <span class="tag-c">&lt;button</span> <span class="prop">onClick</span>={() => <span class="fn">setDisplay</span>(!display)}<span class="tag-c">&gt;</span>
   Toggle
 <span class="tag-c">&lt;/button&gt;</span></pre>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🌿</div>
-          <div>
-            <div class="card-num">File 04 — 4-multipleconditon.jsx</div>
-            <div class="card-title">Nested Ternary</div>
-            <div class="card-desc">Chained multiple ternary conditions to show different JSX based on the counter value — like a switch case in JSX.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">nested ternary</span>
-          <span class="pill">conditional jsx</span>
-          <span class="pill">state driven ui</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre>{count === <span class="num">1</span> ? <span class="tag-c">&lt;h1&gt;</span>first<span class="tag-c">&lt;/h1&gt;</span>
+
+        <!-- Card 4 -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🌿</div>
+            <div>
+              <div class="card-num">File 04 — 4-multipleconditon.jsx</div>
+              <div class="card-title">Nested Ternary</div>
+              <div class="card-desc">Chained multiple ternary conditions to show different JSX based on the counter
+                value — like a switch case in JSX.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">nested ternary</span>
+            <span class="pill">conditional jsx</span>
+            <span class="pill">state driven ui</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre>{count === <span class="num">1</span> ? <span class="tag-c">&lt;h1&gt;</span>first<span class="tag-c">&lt;/h1&gt;</span>
   : count === <span class="num">2</span> ? <span class="tag-c">&lt;h1&gt;</span>second<span class="tag-c">&lt;/h1&gt;</span>
   : count === <span class="num">3</span> ? <span class="tag-c">&lt;h1&gt;</span>third<span class="tag-c">&lt;/h1&gt;</span>
   : <span class="tag-c">&lt;h1&gt;</span>No condition<span class="tag-c">&lt;/h1&gt;</span>
 }
 <span class="cmt">// Tip: use switch or object map for 5+ conditions</span></pre>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ======================= CHAPTER 2: PROPS ======================= -->
-<div class="section-header ch2">
-  <div class="label">Chapter 02</div>
-  <h2>PROPS <span class="glow-text">& COMPOSITION</span></h2>
-</div>
-
-<div class="chapters ch2">
-  <div class="chapter">
-    <div class="cards-grid">
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">📦</div>
-          <div>
-            <div class="card-num">File 05 — 5-prop.jsx</div>
-            <div class="card-title">Passing Props</div>
-            <div class="card-desc">Passed objects as props to reuse the User component for 3 different users. Also conditionally rendered Student only when state has a value.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">props</span><span class="pill">object props</span><span class="pill">conditional render</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">let</span> userObj = { name: <span class="str">"Pankaj"</span>, age: <span class="num">24</span>, email: <span class="str">"..."</span> };
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======================= CHAPTER 2: PROPS ======================= -->
+  <div class="section-header ch2">
+    <div class="label">Chapter 02</div>
+    <h2>PROPS <span class="glow-text">& COMPOSITION</span></h2>
+  </div>
+
+  <div class="chapters ch2">
+    <div class="chapter">
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">📦</div>
+            <div>
+              <div class="card-num">File 05 — 5-prop.jsx</div>
+              <div class="card-title">Passing Props</div>
+              <div class="card-desc">Passed objects as props to reuse the User component for 3 different users. Also
+                conditionally rendered Student only when state has a value.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">props</span><span class="pill">object props</span><span class="pill">conditional
+              render</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">let</span> userObj = { name: <span class="str">"Pankaj"</span>, age: <span class="num">24</span>, email: <span class="str">"..."</span> };
 
 <span class="cmt">// Spread the whole object as one prop</span>
 <span class="tag-c">&lt;User</span> <span class="prop">user</span>={userObj} <span class="tag-c">/&gt;</span>
 
 <span class="cmt">// Conditional render using &&</span>
 { student && <span class="tag-c">&lt;Student</span> <span class="prop">name</span>={student} <span class="tag-c">/&gt;</span> }</pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🎁</div>
-          <div>
-            <div class="card-num">File 06 — 6-advanceprops.jsx</div>
-            <div class="card-title">Children Props & Wrapper</div>
-            <div class="card-desc">Created a Wrapper component that accepts children — anything placed between its tags renders inside it. Also passed color as a prop to customize styling.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">children prop</span><span class="pill">wrapper pattern</span><span class="pill">composition</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="cmt">// Wraper.jsx receives children</span>
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🎁</div>
+            <div>
+              <div class="card-num">File 06 — 6-advanceprops.jsx</div>
+              <div class="card-title">Children Props & Wrapper</div>
+              <div class="card-desc">Created a Wrapper component that accepts children — anything placed between its
+                tags renders inside it. Also passed color as a prop to customize styling.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">children prop</span><span class="pill">wrapper pattern</span><span
+              class="pill">composition</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="cmt">// Wraper.jsx receives children</span>
 <span class="kw">function</span> <span class="fn">Wraper</span>({ children, color }) {
   <span class="kw">return</span> (
     <span class="tag-c">&lt;div</span> <span class="prop">style</span>={{ background: color }}<span class="tag-c">&gt;</span>
@@ -808,42 +981,44 @@
 <span class="tag-c">&lt;Wraper</span> <span class="prop">color</span>=<span class="str">"orange"</span><span class="tag-c">&gt;</span>
   <span class="tag-c">&lt;h1&gt;</span>User Component<span class="tag-c">&lt;/h1&gt;</span>
 <span class="tag-c">&lt;/Wraper&gt;</span></pre>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ======================= CHAPTER 3: FORMS ======================= -->
-<div class="section-header ch3">
-  <div class="label">Chapter 03</div>
-  <h2>FORMS <span class="glow-text">& INPUTS</span></h2>
-</div>
-
-<div class="chapters ch3">
-  <div class="chapter">
-    <div class="cards-grid">
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">⌨️</div>
-          <div>
-            <div class="card-num">File 07 — 7-getinputvalue.jsx</div>
-            <div class="card-title">Controlled Input</div>
-            <div class="card-desc">Wired an input to state with onChange so every keystroke updates the value live. The clear button resets state to empty string.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">onChange</span><span class="pill">e.target.value</span><span class="pill">controlled</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> [val, setVal] = <span class="fn">useState</span>(<span class="str">""</span>);
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======================= CHAPTER 3: FORMS ======================= -->
+  <div class="section-header ch3">
+    <div class="label">Chapter 03</div>
+    <h2>FORMS <span class="glow-text">& INPUTS</span></h2>
+  </div>
+
+  <div class="chapters ch3">
+    <div class="chapter">
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">⌨️</div>
+            <div>
+              <div class="card-num">File 07 — 7-getinputvalue.jsx</div>
+              <div class="card-title">Controlled Input</div>
+              <div class="card-desc">Wired an input to state with onChange so every keystroke updates the value live.
+                The clear button resets state to empty string.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">onChange</span><span class="pill">e.target.value</span><span
+              class="pill">controlled</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> [val, setVal] = <span class="fn">useState</span>(<span class="str">""</span>);
 
 <span class="tag-c">&lt;input</span>
   <span class="prop">value</span>={val}
@@ -852,26 +1027,27 @@
 
 <span class="cmt">// e.target.value = what the user typed</span>
 <span class="tag-c">&lt;button</span> <span class="prop">onClick</span>={() => <span class="fn">setVal</span>(<span class="str">""</span>)<span class="tag-c">}&gt;</span>Clear<span class="tag-c">&lt;/button&gt;</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">📝</div>
-          <div>
-            <div class="card-num">File 08 — 8-controlled.jsx</div>
-            <div class="card-title">Full Form Control</div>
-            <div class="card-desc">Managed name, password, and email with separate states. The Clear button resets all three fields at once using multiple state setters.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">form</span><span class="pill">multiple state</span><span class="pill">clear all</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> [name, setName] = <span class="fn">useState</span>(<span class="str">""</span>);
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">📝</div>
+            <div>
+              <div class="card-num">File 08 — 8-controlled.jsx</div>
+              <div class="card-title">Full Form Control</div>
+              <div class="card-desc">Managed name, password, and email with separate states. The Clear button resets all
+                three fields at once using multiple state setters.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">form</span><span class="pill">multiple state</span><span class="pill">clear all</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> [name, setName] = <span class="fn">useState</span>(<span class="str">""</span>);
 <span class="kw">const</span> [pass, setPass] = <span class="fn">useState</span>(<span class="str">""</span>);
 <span class="kw">const</span> [email, setEmail] = <span class="fn">useState</span>(<span class="str">""</span>);
 
@@ -879,52 +1055,56 @@
 <span class="tag-c">&lt;button</span> <span class="prop">onClick</span>={() => {
   <span class="fn">setName</span>(<span class="str">""</span>); <span class="fn">setPass</span>(<span class="str">""</span>); <span class="fn">setEmail</span>(<span class="str">""</span>);
 }}<span class="tag-c">&gt;</span>Clear<span class="tag-c">&lt;/button&gt;</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">☑️</div>
-          <div>
-            <div class="card-num">File 09 — 9-checkboxes.jsx</div>
-            <div class="card-title">Checkboxes & Arrays</div>
-            <div class="card-desc">State is an array of selected skills. Checking adds to the array with spread; unchecking filters it out. toString() shows selections.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">array state</span><span class="pill">spread operator</span><span class="pill">filter</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> [skills, setSkills] = <span class="fn">useState</span>([]);
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">☑️</div>
+            <div>
+              <div class="card-num">File 09 — 9-checkboxes.jsx</div>
+              <div class="card-title">Checkboxes & Arrays</div>
+              <div class="card-desc">State is an array of selected skills. Checking adds to the array with spread;
+                unchecking filters it out. toString() shows selections.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">array state</span><span class="pill">spread operator</span><span
+              class="pill">filter</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> [skills, setSkills] = <span class="fn">useState</span>([]);
 
 <span class="kw">if</span> (e.target.checked) {
   <span class="fn">setSkills</span>([...skills, e.target.value]);
 } <span class="kw">else</span> {
   <span class="fn">setSkills</span>(skills.<span class="fn">filter</span>(i => i !== e.target.value));
 }</pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🔘</div>
-          <div>
-            <div class="card-num">File 10 — 10-radio.jsx</div>
-            <div class="card-title">Radio & Select</div>
-            <div class="card-desc">Radio buttons use checked={gender == "male"} to stay in sync with state. Also used a select dropdown for city selection with defaultValue.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">radio buttons</span><span class="pill">select dropdown</span><span class="pill">controlled</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="cmt">// Radio stays in sync via checked prop</span>
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🔘</div>
+            <div>
+              <div class="card-num">File 10 — 10-radio.jsx</div>
+              <div class="card-title">Radio & Select</div>
+              <div class="card-desc">Radio buttons use checked={gender == "male"} to stay in sync with state. Also used
+                a select dropdown for city selection with defaultValue.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">radio buttons</span><span class="pill">select dropdown</span><span
+              class="pill">controlled</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="cmt">// Radio stays in sync via checked prop</span>
 <span class="tag-c">&lt;input</span> <span class="prop">type</span>=<span class="str">"radio"</span>
   <span class="prop">value</span>=<span class="str">"male"</span>
   <span class="prop">checked</span>={gender == <span class="str">"male"</span>}
@@ -936,68 +1116,71 @@
   <span class="prop">onChange</span>={(e) => <span class="fn">setCity</span>(e.target.value)}<span class="tag-c">&gt;</span>
   ...
 <span class="tag-c">&lt;/select&gt;</span></pre>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ======================= CHAPTER 4: LISTS ======================= -->
-<div class="section-header ch4">
-  <div class="label">Chapter 04</div>
-  <h2>LISTS <span class="glow-text">& REUSE</span></h2>
-</div>
-
-<div class="chapters ch4">
-  <div class="chapter">
-    <div class="cards-grid">
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🔁</div>
-          <div>
-            <div class="card-num">File 11 — 11-loop.jsx</div>
-            <div class="card-title">Map in JSX</div>
-            <div class="card-desc">Used JavaScript's .map() to loop through arrays and render JSX for each item. The key prop helps React track items efficiently.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">.map()</span><span class="pill">key prop</span><span class="pill">dynamic list</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> items = [<span class="str">"one"</span>, <span class="str">"two"</span>, <span class="str">"three"</span>];
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======================= CHAPTER 4: LISTS ======================= -->
+  <div class="section-header ch4">
+    <div class="label">Chapter 04</div>
+    <h2>LISTS <span class="glow-text">& REUSE</span></h2>
+  </div>
+
+  <div class="chapters ch4">
+    <div class="chapter">
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🔁</div>
+            <div>
+              <div class="card-num">File 11 — 11-loop.jsx</div>
+              <div class="card-title">Map in JSX</div>
+              <div class="card-desc">Used JavaScript's .map() to loop through arrays and render JSX for each item. The
+                key prop helps React track items efficiently.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">.map()</span><span class="pill">key prop</span><span class="pill">dynamic list</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> items = [<span class="str">"one"</span>, <span class="str">"two"</span>, <span class="str">"three"</span>];
 
 items.<span class="fn">map</span>((item, index) => (
   <span class="tag-c">&lt;li</span> <span class="prop">key</span>={index}<span class="tag-c">&gt;</span>{item}<span class="tag-c">&lt;/li&gt;</span>
 ))
 
 <span class="cmt">// key must be unique — prefer item.id over index</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">♻️</div>
-          <div>
-            <div class="card-num">File 12 — 12-reuse.jsx</div>
-            <div class="card-title">Reusable Components</div>
-            <div class="card-desc">Mapped through a students array and passed each object to a reusable User card component. The power of React — one component, infinite uses.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">component reuse</span><span class="pill">data driven</span><span class="pill">key={item.id}</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> students = [
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">♻️</div>
+            <div>
+              <div class="card-num">File 12 — 12-reuse.jsx</div>
+              <div class="card-title">Reusable Components</div>
+              <div class="card-desc">Mapped through a students array and passed each object to a reusable User card
+                component. The power of React — one component, infinite uses.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">component reuse</span><span class="pill">data driven</span><span
+              class="pill">key={item.id}</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> students = [
   { id: <span class="num">1</span>, name: <span class="str">"pankaj"</span>, role: <span class="str">"QA intern"</span> },
   { id: <span class="num">2</span>, name: <span class="str">"rohit"</span>,  role: <span class="str">"QA intern"</span> },
   ...
@@ -1006,42 +1189,44 @@ items.<span class="fn">map</span>((item, index) => (
 students.<span class="fn">map</span>((item) => (
   <span class="tag-c">&lt;User</span> <span class="prop">key</span>={item.id} <span class="prop">data</span>={item} <span class="tag-c">/&gt;</span>
 ))</pre>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ======================= CHAPTER 5: EFFECTS ======================= -->
-<div class="section-header ch5">
-  <div class="label">Chapter 05</div>
-  <h2>USE<span class="glow-text">EFFECT</span> & LIFECYCLE</h2>
-</div>
-
-<div class="chapters ch5">
-  <div class="chapter">
-    <div class="cards-grid">
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">⚡</div>
-          <div>
-            <div class="card-num">File 13 — 13-useEffect.jsx</div>
-            <div class="card-title">useEffect Hook</div>
-            <div class="card-desc">useEffect runs a side-effect when dependencies change. Watched both counter and data — effect fires only when those values update.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">useEffect</span><span class="pill">dependency array</span><span class="pill">side effects</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="cmt">// Runs after render when [counter] or [data] changes</span>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======================= CHAPTER 5: EFFECTS ======================= -->
+  <div class="section-header ch5">
+    <div class="label">Chapter 05</div>
+    <h2>USE<span class="glow-text">EFFECT</span> & LIFECYCLE</h2>
+  </div>
+
+  <div class="chapters ch5">
+    <div class="chapter">
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">⚡</div>
+            <div>
+              <div class="card-num">File 13 — 13-useEffect.jsx</div>
+              <div class="card-title">useEffect Hook</div>
+              <div class="card-desc">useEffect runs a side-effect when dependencies change. Watched both counter and
+                data — effect fires only when those values update.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">useEffect</span><span class="pill">dependency array</span><span class="pill">side
+              effects</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="cmt">// Runs after render when [counter] or [data] changes</span>
 <span class="fn">useEffect</span>(() => {
   <span class="fn">counterFunction</span>();
 }, [counter, data]);
@@ -1049,52 +1234,56 @@ students.<span class="fn">map</span>((item) => (
 <span class="cmt">// [] = runs once on mount
 // [val] = runs when val changes
 // no array = runs on every render</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🔗</div>
-          <div>
-            <div class="card-num">File 14 — 14-propsEffect.jsx</div>
-            <div class="card-title">Props + useEffect</div>
-            <div class="card-desc">Passed props to a Counter child and watched them change via useEffect inside the child. Shows how child components react to parent state updates.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">props change</span><span class="pill">child useEffect</span><span class="pill">parent-child</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="cmt">// Parent sends count & data as props</span>
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🔗</div>
+            <div>
+              <div class="card-num">File 14 — 14-propsEffect.jsx</div>
+              <div class="card-title">Props + useEffect</div>
+              <div class="card-desc">Passed props to a Counter child and watched them change via useEffect inside the
+                child. Shows how child components react to parent state updates.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">props change</span><span class="pill">child useEffect</span><span
+              class="pill">parent-child</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="cmt">// Parent sends count & data as props</span>
 <span class="tag-c">&lt;Counter</span> <span class="prop">count</span>={count} <span class="prop">data</span>={data} <span class="tag-c">/&gt;</span>
 
 <span class="cmt">// Inside Counter.jsx — useEffect watches props</span>
 <span class="fn">useEffect</span>(() => {
   console.<span class="fn">log</span>(<span class="str">"prop changed!"</span>, count);
 }, [count, data]);</pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🔄</div>
-          <div>
-            <div class="card-num">File 15 — 15-lifecycle.jsx</div>
-            <div class="card-title">Component Lifecycle</div>
-            <div class="card-desc">Learned all 3 phases: mounting (component appears), updating (state/props change), and unmounting (component disappears). Cleanup runs on unmount.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">mount</span><span class="pill">update</span><span class="pill">unmount</span><span class="pill">cleanup</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="fn">useEffect</span>(() => {
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🔄</div>
+            <div>
+              <div class="card-num">File 15 — 15-lifecycle.jsx</div>
+              <div class="card-title">Component Lifecycle</div>
+              <div class="card-desc">Learned all 3 phases: mounting (component appears), updating (state/props change),
+                and unmounting (component disappears). Cleanup runs on unmount.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">mount</span><span class="pill">update</span><span class="pill">unmount</span><span
+              class="pill">cleanup</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="fn">useEffect</span>(() => {
   console.<span class="fn">log</span>(<span class="str">"mounted / updated"</span>);
 
   <span class="kw">return</span> () => {
@@ -1102,67 +1291,70 @@ students.<span class="fn">map</span>((item) => (
     console.<span class="fn">log</span>(<span class="str">"unmounting phase"</span>);
   };
 }, [toggle]);</pre>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<!-- ======================= CHAPTER 6: STYLING ======================= -->
-<div class="section-header ch6">
-  <div class="label">Chapter 06</div>
-  <h2>STYLING <span class="glow-text">TECHNIQUES</span></h2>
-</div>
-
-<div class="chapters ch6">
-  <div class="chapter">
-    <div class="cards-grid">
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🎨</div>
-          <div>
-            <div class="card-num">File 16 — 16-inline.jsx</div>
-            <div class="card-title">Inline Styles</div>
-            <div class="card-desc">Applied styles directly as JS objects using camelCase properties. Quick for one-off styles but harder to maintain for complex UIs.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">style prop</span><span class="pill">camelCase</span><span class="pill">js object</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="cmt">// CSS property names are camelCase in JSX</span>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ======================= CHAPTER 6: STYLING ======================= -->
+  <div class="section-header ch6">
+    <div class="label">Chapter 06</div>
+    <h2>STYLING <span class="glow-text">TECHNIQUES</span></h2>
+  </div>
+
+  <div class="chapters ch6">
+    <div class="chapter">
+      <div class="cards-grid">
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🎨</div>
+            <div>
+              <div class="card-num">File 16 — 16-inline.jsx</div>
+              <div class="card-title">Inline Styles</div>
+              <div class="card-desc">Applied styles directly as JS objects using camelCase properties. Quick for one-off
+                styles but harder to maintain for complex UIs.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">style prop</span><span class="pill">camelCase</span><span class="pill">js object</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="cmt">// CSS property names are camelCase in JSX</span>
 <span class="tag-c">&lt;h1</span> <span class="prop">style</span>={{
   color: <span class="str">"red"</span>,
   fontSize: <span class="str">"24px"</span>,    <span class="cmt">// not font-size</span>
   backgroundColor: <span class="str">"blue"</span>  <span class="cmt">// not background-color</span>
 }}<span class="tag-c">&gt;</span>Hello<span class="tag-c">&lt;/h1&gt;</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🌈</div>
-          <div>
-            <div class="card-num">File 17 — 17-dynamicinline.jsx</div>
-            <div class="card-title">Dynamic Inline Styling</div>
-            <div class="card-desc">Stored a style object in state and updated it on button click. Spread operator preserved existing styles while overriding only backgroundColor.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">state object</span><span class="pill">spread styles</span><span class="pill">dynamic theme</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">const</span> [cardTheme, setCardTheme] = <span class="fn">useState</span>({
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🌈</div>
+            <div>
+              <div class="card-num">File 17 — 17-dynamicinline.jsx</div>
+              <div class="card-title">Dynamic Inline Styling</div>
+              <div class="card-desc">Stored a style object in state and updated it on button click. Spread operator
+                preserved existing styles while overriding only backgroundColor.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">state object</span><span class="pill">spread styles</span><span class="pill">dynamic
+              theme</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">const</span> [cardTheme, setCardTheme] = <span class="fn">useState</span>({
   border: <span class="str">"1px solid green"</span>,
   width: <span class="str">"200px"</span>,
 });
@@ -1171,52 +1363,56 @@ students.<span class="fn">map</span>((item) => (
 <span class="fn">setCardTheme</span>({ ...cardTheme, backgroundColor: bgColor });
 
 <span class="tag-c">&lt;div</span> <span class="prop">style</span>={cardTheme}<span class="tag-c">&gt;</span>...<span class="tag-c">&lt;/div&gt;</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🗂️</div>
-          <div>
-            <div class="card-num">File 18 — 18-cssmodule.jsx</div>
-            <div class="card-title">CSS Modules</div>
-            <div class="card-desc">CSS Modules scope class names to the component automatically — no more global class name collisions. Import as styles and use styles.className.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">scoped css</span><span class="pill">no collisions</span><span class="pill">.module.css</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="cmt">// Import the CSS module</span>
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🗂️</div>
+            <div>
+              <div class="card-num">File 18 — 18-cssmodule.jsx</div>
+              <div class="card-title">CSS Modules</div>
+              <div class="card-desc">CSS Modules scope class names to the component automatically — no more global class
+                name collisions. Import as styles and use styles.className.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">scoped css</span><span class="pill">no collisions</span><span
+              class="pill">.module.css</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="cmt">// Import the CSS module</span>
 <span class="kw">import</span> styles <span class="kw">from</span> <span class="str">"./UserProfile.module.css"</span>;
 
 <span class="cmt">// Use as JS object — name gets hashed</span>
 <span class="tag-c">&lt;div</span> <span class="prop">className</span>={styles.card}<span class="tag-c">&gt;</span>
   <span class="tag-c">&lt;h2</span> <span class="prop">className</span>={styles.name}<span class="tag-c">&gt;</span>Pankaj<span class="tag-c">&lt;/h2&gt;</span>
 <span class="tag-c">&lt;/div&gt;</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">💅</div>
-          <div>
-            <div class="card-num">File 19 — 19-styled.jsx</div>
-            <div class="card-title">Styled Components</div>
-            <div class="card-desc">Used the styled-components library to write real CSS inside template literals. The styled element becomes a real React component you can reuse.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">styled-components</span><span class="pill">template literals</span><span class="pill">css-in-js</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">import</span> styled <span class="kw">from</span> <span class="str">"styled-components"</span>;
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">💅</div>
+            <div>
+              <div class="card-num">File 19 — 19-styled.jsx</div>
+              <div class="card-title">Styled Components</div>
+              <div class="card-desc">Used the styled-components library to write real CSS inside template literals. The
+                styled element becomes a real React component you can reuse.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">styled-components</span><span class="pill">template literals</span><span
+              class="pill">css-in-js</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">import</span> styled <span class="kw">from</span> <span class="str">"styled-components"</span>;
 
 <span class="cmt">// Creates a styled h1 component</span>
 <span class="kw">const</span> Styling = styled.h1<span class="str">`
@@ -1227,171 +1423,201 @@ students.<span class="fn">map</span>((item) => (
 
 <span class="cmt">// Use it like a normal component</span>
 <span class="tag-c">&lt;Styling&gt;</span>heading1<span class="tag-c">&lt;/Styling&gt;</span></pre>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-top">
-          <div class="card-icon">🅱️</div>
-          <div>
-            <div class="card-num">File 20 — 20-bootstrap.jsx</div>
-            <div class="card-title">React Bootstrap</div>
-            <div class="card-desc">Installed and used React Bootstrap for pre-built UI components. Import individual components like Button with variants (danger, primary, success) for instant styling.</div>
           </div>
         </div>
-        <div class="concept-pills">
-          <span class="pill">react-bootstrap</span><span class="pill">variants</span><span class="pill">component library</span>
-        </div>
-        <button class="card-toggle" onclick="toggleCode(this)">
-          <span>VIEW CODE</span><span class="chevron">▼</span>
-        </button>
-        <div class="card-code">
-<pre><span class="kw">import</span> { Button } <span class="kw">from</span> <span class="str">"react-bootstrap"</span>;
+
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon">🅱️</div>
+            <div>
+              <div class="card-num">File 20 — 20-bootstrap.jsx</div>
+              <div class="card-title">React Bootstrap</div>
+              <div class="card-desc">Installed and used React Bootstrap for pre-built UI components. Import individual
+                components like Button with variants (danger, primary, success) for instant styling.</div>
+            </div>
+          </div>
+          <div class="concept-pills">
+            <span class="pill">react-bootstrap</span><span class="pill">variants</span><span class="pill">component
+              library</span>
+          </div>
+          <button class="card-toggle" onclick="toggleCode(this)">
+            <span>VIEW CODE</span><span class="chevron">▼</span>
+          </button>
+          <div class="card-code">
+            <pre><span class="kw">import</span> { Button } <span class="kw">from</span> <span class="str">"react-bootstrap"</span>;
 
 <span class="cmt">// variant controls the color theme</span>
 <span class="tag-c">&lt;Button</span> <span class="prop">variant</span>=<span class="str">"danger"</span><span class="tag-c">&gt;</span>Delete<span class="tag-c">&lt;/Button&gt;</span>
 <span class="tag-c">&lt;Button</span> <span class="prop">variant</span>=<span class="str">"primary"</span><span class="tag-c">&gt;</span>Submit<span class="tag-c">&lt;/Button&gt;</span>
 <span class="tag-c">&lt;Button</span> <span class="prop">variant</span>=<span class="str">"success"</span><span class="tag-c">&gt;</span>Save<span class="tag-c">&lt;/Button&gt;</span></pre>
+          </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
-</div>
 
-<div class="divider"></div>
+  <div class="divider"></div>
 
-<!-- ======================= PROJECT ======================= -->
-<div class="section-header" style="padding-bottom:20px">
-  <div class="label">🚀 Capstone Project</div>
-  <h2>NOW BUILD <span style="color:var(--accent3)">SOMETHING REAL</span></h2>
-</div>
+  <!-- ======================= PROJECT ======================= -->
+  <div class="section-header" style="padding-bottom:20px">
+    <div class="label">🚀 Capstone Project</div>
+    <h2>NOW BUILD <span style="color:var(--accent3)">SOMETHING REAL</span></h2>
+  </div>
 
-<div class="project-section">
-  <div class="project-banner">
-    <div class="project-inner">
-      <div class="project-tag">PROJECT IDEA</div>
-      <div class="project-title">Student Profile<br>Dashboard</div>
-      <p class="project-desc">
-        A fully interactive student management app that uses every concept you've learned.
-        Add students via a form, filter by skills, toggle cards, and manage everything
-        through state — no backend needed.
-      </p>
+  <div class="project-section">
+    <div class="project-banner">
+      <div class="project-inner">
+        <div class="project-tag">PROJECT IDEA</div>
+        <div class="project-title">Student Profile<br>Dashboard</div>
+        <p class="project-desc">
+          A fully interactive student management app that uses every concept you've learned.
+          Add students via a form, filter by skills, toggle cards, and manage everything
+          through state — no backend needed.
+        </p>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">📋</div>
-          <div class="feature-title">Add Student Form</div>
-          <div class="feature-concepts">
-            Uses <span>controlled inputs</span> <span>useState</span> <span>form handling</span>
-            — Name, email, role fields. Submit adds to the student list.
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <div class="feature-title">Add Student Form</div>
+            <div class="feature-concepts">
+              Uses <span>controlled inputs</span> <span>useState</span> <span>form handling</span>
+              — Name, email, role fields. Submit adds to the student list.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🃏</div>
+            <div class="feature-title">Student Cards List</div>
+            <div class="feature-concepts">
+              Uses <span>.map()</span> <span>props</span> <span>reusable component</span>
+              — Renders a card for every student dynamically.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-title">Filter by Skills</div>
+            <div class="feature-concepts">
+              Uses <span>checkboxes</span> <span>array state</span> <span>filter()</span>
+              — Check PHP/JS/Node to show only matching students.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🌙</div>
+            <div class="feature-title">Dark / Light Toggle</div>
+            <div class="feature-concepts">
+              Uses <span>boolean state</span> <span>dynamic inline styles</span> <span>toggle</span>
+              — Swap theme with one button click.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <div class="feature-title">Live Clock</div>
+            <div class="feature-concepts">
+              Uses <span>useEffect</span> <span>setInterval</span> <span>cleanup</span>
+              — Shows current time, updates every second via effect.
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-title">Styled UI</div>
+            <div class="feature-concepts">
+              Uses <span>CSS modules</span> or <span>styled-components</span> <span>bootstrap</span>
+              — Clean, professional-looking interface.
+            </div>
           </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🃏</div>
-          <div class="feature-title">Student Cards List</div>
-          <div class="feature-concepts">
-            Uses <span>.map()</span> <span>props</span> <span>reusable component</span>
-            — Renders a card for every student dynamically.
+
+        <div style="margin-bottom:30px">
+          <div
+            style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">
+            📁 Suggested File Structure</div>
+          <div class="file-structure">
+            <span class="dir">src/</span><br>
+            &nbsp;&nbsp;<span class="dir">components/</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="file">StudentCard.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">←
+              reuse from file 12</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">AddStudentForm.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="comment">← controlled inputs (file 8)</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="file">SkillFilter.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">←
+              checkboxes (file 9)</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="file">Navbar.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="comment">← bootstrap (file 20)</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="file">LiveClock.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="comment">← useEffect + cleanup (file 15)</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="file">ThemeToggle.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">←
+              toggle + dynamic styles (file 17)</span><br>
+            &nbsp;&nbsp;<span
+              class="new">App.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+              class="comment">← all components wired together</span>
           </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-          <div class="feature-title">Filter by Skills</div>
-          <div class="feature-concepts">
-            Uses <span>checkboxes</span> <span>array state</span> <span>filter()</span>
-            — Check PHP/JS/Node to show only matching students.
+
+        <div class="progress-bar-wrap">
+          <div class="progress-label">✅ Skills You Have For This Project</div>
+          <div class="skills-map">
+            <div class="skill-badge" style="color:var(--accent1);border-color:rgba(255,107,53,0.3)"><span class="dot"
+                style="background:var(--accent1)"></span>useState</div>
+            <div class="skill-badge" style="color:var(--accent2);border-color:rgba(0,229,255,0.3)"><span class="dot"
+                style="background:var(--accent2)"></span>Props</div>
+            <div class="skill-badge" style="color:var(--accent3);border-color:rgba(180,77,255,0.3)"><span class="dot"
+                style="background:var(--accent3)"></span>Controlled Forms</div>
+            <div class="skill-badge" style="color:var(--accent4);border-color:rgba(57,255,20,0.3)"><span class="dot"
+                style="background:var(--accent4)"></span>Checkboxes</div>
+            <div class="skill-badge" style="color:var(--accent5);border-color:rgba(255,215,0,0.3)"><span class="dot"
+                style="background:var(--accent5)"></span>useEffect</div>
+            <div class="skill-badge" style="color:var(--accent6);border-color:rgba(255,61,113,0.3)"><span class="dot"
+                style="background:var(--accent6)"></span>Lifecycle</div>
+            <div class="skill-badge" style="color:var(--accent1);border-color:rgba(255,107,53,0.3)"><span class="dot"
+                style="background:var(--accent1)"></span>.map() & Keys</div>
+            <div class="skill-badge" style="color:var(--accent2);border-color:rgba(0,229,255,0.3)"><span class="dot"
+                style="background:var(--accent2)"></span>CSS Modules</div>
+            <div class="skill-badge" style="color:var(--accent3);border-color:rgba(180,77,255,0.3)"><span class="dot"
+                style="background:var(--accent3)"></span>Bootstrap</div>
+            <div class="skill-badge" style="color:var(--accent4);border-color:rgba(57,255,20,0.3)"><span class="dot"
+                style="background:var(--accent4)"></span>Dynamic Styles</div>
+            <div class="skill-badge" style="color:var(--accent5);border-color:rgba(255,215,0,0.3)"><span class="dot"
+                style="background:var(--accent5)"></span>Toggle</div>
+            <div class="skill-badge" style="color:var(--accent6);border-color:rgba(255,61,113,0.3)"><span class="dot"
+                style="background:var(--accent6)"></span>Children Props</div>
           </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🌙</div>
-          <div class="feature-title">Dark / Light Toggle</div>
-          <div class="feature-concepts">
-            Uses <span>boolean state</span> <span>dynamic inline styles</span> <span>toggle</span>
-            — Swap theme with one button click.
-          </div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⏱️</div>
-          <div class="feature-title">Live Clock</div>
-          <div class="feature-concepts">
-            Uses <span>useEffect</span> <span>setInterval</span> <span>cleanup</span>
-            — Shows current time, updates every second via effect.
-          </div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🎨</div>
-          <div class="feature-title">Styled UI</div>
-          <div class="feature-concepts">
-            Uses <span>CSS modules</span> or <span>styled-components</span> <span>bootstrap</span>
-            — Clean, professional-looking interface.
-          </div>
-        </div>
+
       </div>
-
-      <div style="margin-bottom:30px">
-        <div style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:14px;">📁 Suggested File Structure</div>
-        <div class="file-structure">
-          <span class="dir">src/</span><br>
-          &nbsp;&nbsp;<span class="dir">components/</span><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">StudentCard.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← reuse from file 12</span><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">AddStudentForm.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← controlled inputs (file 8)</span><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">SkillFilter.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← checkboxes (file 9)</span><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">Navbar.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← bootstrap (file 20)</span><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">LiveClock.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← useEffect + cleanup (file 15)</span><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">ThemeToggle.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← toggle + dynamic styles (file 17)</span><br>
-          &nbsp;&nbsp;<span class="new">App.jsx</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">← all components wired together</span>
-        </div>
-      </div>
-
-      <div class="progress-bar-wrap">
-        <div class="progress-label">✅ Skills You Have For This Project</div>
-        <div class="skills-map">
-          <div class="skill-badge" style="color:var(--accent1);border-color:rgba(255,107,53,0.3)"><span class="dot" style="background:var(--accent1)"></span>useState</div>
-          <div class="skill-badge" style="color:var(--accent2);border-color:rgba(0,229,255,0.3)"><span class="dot" style="background:var(--accent2)"></span>Props</div>
-          <div class="skill-badge" style="color:var(--accent3);border-color:rgba(180,77,255,0.3)"><span class="dot" style="background:var(--accent3)"></span>Controlled Forms</div>
-          <div class="skill-badge" style="color:var(--accent4);border-color:rgba(57,255,20,0.3)"><span class="dot" style="background:var(--accent4)"></span>Checkboxes</div>
-          <div class="skill-badge" style="color:var(--accent5);border-color:rgba(255,215,0,0.3)"><span class="dot" style="background:var(--accent5)"></span>useEffect</div>
-          <div class="skill-badge" style="color:var(--accent6);border-color:rgba(255,61,113,0.3)"><span class="dot" style="background:var(--accent6)"></span>Lifecycle</div>
-          <div class="skill-badge" style="color:var(--accent1);border-color:rgba(255,107,53,0.3)"><span class="dot" style="background:var(--accent1)"></span>.map() & Keys</div>
-          <div class="skill-badge" style="color:var(--accent2);border-color:rgba(0,229,255,0.3)"><span class="dot" style="background:var(--accent2)"></span>CSS Modules</div>
-          <div class="skill-badge" style="color:var(--accent3);border-color:rgba(180,77,255,0.3)"><span class="dot" style="background:var(--accent3)"></span>Bootstrap</div>
-          <div class="skill-badge" style="color:var(--accent4);border-color:rgba(57,255,20,0.3)"><span class="dot" style="background:var(--accent4)"></span>Dynamic Styles</div>
-          <div class="skill-badge" style="color:var(--accent5);border-color:rgba(255,215,0,0.3)"><span class="dot" style="background:var(--accent5)"></span>Toggle</div>
-          <div class="skill-badge" style="color:var(--accent6);border-color:rgba(255,61,113,0.3)"><span class="dot" style="background:var(--accent6)"></span>Children Props</div>
-        </div>
-      </div>
-
     </div>
   </div>
-</div>
 
-<footer>
-  Built from <span>20 hand-crafted</span> React components · Ludhiana → the world 🚀
-</footer>
+  <footer>
+    Built from <span>20 hand-crafted</span> React components · Ludhiana → the world 🚀
+  </footer>
 
-<script>
-  function toggleCode(btn) {
-    const code = btn.nextElementSibling;
-    const chevron = btn.querySelector('.chevron');
-    const label = btn.querySelector('span:first-child');
-    const isOpen = code.classList.toggle('open');
-    chevron.classList.toggle('open', isOpen);
-    label.textContent = isOpen ? 'HIDE CODE' : 'VIEW CODE';
-  }
+  <script>
+    function toggleCode(btn) {
+      const code = btn.nextElementSibling;
+      const chevron = btn.querySelector('.chevron');
+      const label = btn.querySelector('span:first-child');
+      const isOpen = code.classList.toggle('open');
+      chevron.classList.toggle('open', isOpen);
+      label.textContent = isOpen ? 'HIDE CODE' : 'VIEW CODE';
+    }
 
-  // Animate cards on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        entry.target.style.animationDelay = (i * 0.05) + 's';
-        entry.target.style.animation = 'fadeUp 0.5s ease both';
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
+    // Animate cards on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationDelay = (i * 0.05) + 's';
+          entry.target.style.animation = 'fadeUp 0.5s ease both';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
 
-  document.querySelectorAll('.card, .feature-card').forEach(el => observer.observe(el));
-</script>
+    document.querySelectorAll('.card, .feature-card').forEach(el => observer.observe(el));
+  </script>
 </body>
+
 </html>
